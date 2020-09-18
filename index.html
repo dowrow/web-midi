@@ -7,18 +7,24 @@
         <script>
 
             function onMIDIMessage(message) {
-
+                console.log('New message');
+                console.log({message});
+                const [command, note, velocity] = message.data;
+                console.log({ command, note, velocity });
             }
             
             function listenForMIDIMessages(inputDevices) {
                 if (inputDevices.length) {
                     inputDevices.forEach((inputDevice) => {
+                        console.log('Listening for MIDI messages on input:');
+                        console.log(input);
                         inputDevice.onmidimessage = onMIDIMessage;
                     });
                 } else {
                     alert('Looks like there\'s no MIDI device connected :I');
                 }
             }
+
             function onAccessGranted(access) {
                 const inputDevices = Array.from(access.inputs.values());
                 listenForMIDIMessages(inputDevices);
