@@ -7,10 +7,12 @@
         <script>
 
             function onMIDIMessage(message) {
-                console.log('New message');
-                console.log({message});
                 const [command, note, velocity] = message.data;
-                console.log({ command, note, velocity });
+
+                if (command > 143 && command < 160) {
+                    console.log('Note on');
+                    console.log({ command, note, velocity });
+                }
             }
             
             function listenForMIDIMessages(inputDevices) {
@@ -28,7 +30,7 @@
             function onAccessGranted(access) {
                 const inputDevices = Array.from(access.inputs.values());
                 listenForMIDIMessages(inputDevices);
-                access.onstatechange = requestAccess;
+                //access.onstatechange = requestAccess;
             }
 
             function onAccessDenied(e) {
