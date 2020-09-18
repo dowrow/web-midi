@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Web MIDI API Experiment</title>
+    </head>
+    <body>
+        <script>
+
+            function onMIDIMessage(message) {
+
+            }
+            
+            function listenForMIDIMessages(inputDevices) {
+                if (inputDevices.length) {
+                    inputDevices.forEach((inputDevice) => {
+                        inputDevice.onmidimessage = onMIDIMessage;
+                    });
+                } else {
+                    alert('Looks like there\'s no MIDI device connected :I');
+                }
+            }
+            function onAccessGranted(access) {
+                const inputDevices = Array.from(access.inputs.values());
+                listenForMIDIMessages(inputDevices);
+                access.onstatechange = requestAccess;
+            }
+
+            function onAccessDenied(e) {
+                console.log(e);
+                alert('We were not able to connect to any MIDI device :(');
+            }
+
+            function requestAccess() {
+                navigator.requestMIDIAccess()
+                    .then(onAccessGranted)
+                    .catch(onAccessDenied);
+            }
+
+            if (navigator.requestMIDIAccess) {
+                requestAccess();
+            } else {
+                alert('Sorry, your browser doesn\'t support the Web MIDI API. Try using Chrome.');
+            }
+        
+        </script>
+    </body>
+</html>
