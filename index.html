@@ -17,7 +17,7 @@
                 if (inputDevices.length) {
                     inputDevices.forEach((inputDevice) => {
                         console.log('Listening for MIDI messages on input:');
-                        console.log(input);
+                        console.log(inputDevice);
                         inputDevice.onmidimessage = onMIDIMessage;
                     });
                 } else {
