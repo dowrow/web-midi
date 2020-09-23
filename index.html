@@ -2,54 +2,14 @@
 <html>
     <head>
         <title>Web MIDI API Experiment</title>
+        <style>
+            body {
+                margin: 0;
+            }
+        </style>
     </head>
     <body>
-        <script>
-
-            function onMIDIMessage(message) {
-                const [command, note, velocity] = message.data;
-
-                if (command > 143 && command < 160) {
-                    console.log('Note on');
-                    console.log({ command, note, velocity });
-                }
-            }
-            
-            function listenForMIDIMessages(inputDevices) {
-                if (inputDevices.length) {
-                    inputDevices.forEach((inputDevice) => {
-                        console.log('Listening for MIDI messages on input:');
-                        console.log(inputDevice);
-                        inputDevice.onmidimessage = onMIDIMessage;
-                    });
-                } else {
-                    alert('Looks like there\'s no MIDI device connected :I');
-                }
-            }
-
-            function onAccessGranted(access) {
-                const inputDevices = Array.from(access.inputs.values());
-                listenForMIDIMessages(inputDevices);
-                //access.onstatechange = requestAccess;
-            }
-
-            function onAccessDenied(e) {
-                console.log(e);
-                alert('We were not able to connect to any MIDI device :(');
-            }
-
-            function requestAccess() {
-                navigator.requestMIDIAccess()
-                    .then(onAccessGranted)
-                    .catch(onAccessDenied);
-            }
-
-            if (navigator.requestMIDIAccess) {
-                requestAccess();
-            } else {
-                alert('Sorry, your browser doesn\'t support the Web MIDI API. Try using Chrome.');
-            }
-        
-        </script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.1.9/p5.min.js"></script>
+        <script src="index.js"></script>
     </body>
 </html>
