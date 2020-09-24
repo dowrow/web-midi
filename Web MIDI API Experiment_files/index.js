@@ -158,10 +158,12 @@ function drawCrash(intensity) {
 
 function drawClosedHihat(intensity) {
     const side = map(intensity, 0, 160, 0, max(innerWidth, innerHeight) * 0.5);
-    const x = random(0, innerWidth - 0.5 * side);
-    const y = random(0, innerHeight - 0.5 * side);
+    const x = random(0, innerWidth);
+    const y = random(0, innerHeight);
     
     noStroke();
+    rotate(0.6);
+
     polygon(x, y, side, 3);
 }
 
@@ -180,7 +182,7 @@ function drawHighTom(intensity) {
     const y = random(0, innerHeight);
     
     noStroke();
-    polygon(x, y, side, 5);
+    ellipse(x, y, side, side);
 }
 
 function drawMidTom(intensity) {
@@ -189,7 +191,7 @@ function drawMidTom(intensity) {
     const y = random(0, innerHeight);
     
     noStroke();
-    polygon(x, y, side, 6);
+    ellipse(x, y, side, side);
 }
 
 function drawLowTom(intensity) {
@@ -198,7 +200,7 @@ function drawLowTom(intensity) {
     const y = random(0, innerHeight);
     
     noStroke();
-    polygon(x, y, side, 7);
+    ellipse(x, y, side, side);
 }
 
 function drawRide(intensity) {
@@ -217,6 +219,8 @@ function invertHex(hex) {
 function draw() {
     let hit;
     while (hit = hits.shift()) {
+        console.log('drawing:');
+        console.log( { hit });
         push();
         switch (hit.pad) {
             case BASSDRUM:
