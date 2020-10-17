@@ -1,0 +1,23 @@
+{
+  "name": "web-midi",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {},
+  "devDependencies": {
+    "eslint": "^7.11.0"
+  },
+  "scripts": {
+    "lint": "eslint --fix index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dowrow/web-midi.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dowrow/web-midi/issues"
+  },
+  "homepage": "https://github.com/dowrow/web-midi#readme"
+}

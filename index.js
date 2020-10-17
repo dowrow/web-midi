@@ -1,3 +1,6 @@
+const Y_AXIS = 'Y_AXIS';
+const X_AXIS = 'X_AXIS';
+
 const BASSDRUM = 'BASSDRUM';
 const SNARE = 'SNARE';
 const SNARE_RIM = 'SNARE_RIM';
@@ -48,6 +51,7 @@ function preload() {
 }
 
 function parseHit({ note, velocity }) {
+    console.log('Parsing note: ' + note);
     const pad = notePadMap[note];
     hits.push({
         pad,
@@ -114,7 +118,9 @@ function drawBassdrum(intensity) {
     const radius = map(intensity, 0, 160, 0, max(innerWidth, innerHeight));
     const x = random(0, innerWidth);
     const y = random(0, innerHeight);
-
+    
+    blendMode(DIFFERENCE);
+    fill(invertHex('#ae2633'));
     noStroke();
     ellipse(x, y, radius, radius);
 }
@@ -151,7 +157,9 @@ function drawCrash(intensity) {
     const radius = map(intensity, 0, 160, 0, max(innerWidth, innerHeight) * 0.5);
     const x = random(0, innerWidth);
     const y = random(0, innerHeight);
-    
+
+    blendMode(DIFFERENCE);
+    fill(invertHex('#CAFF12'));
     noStroke();
     star(x, y, radius * 0.5, radius, 12);
 }
@@ -161,6 +169,7 @@ function drawClosedHihat(intensity) {
     const x = random(0, innerWidth - 0.5 * side);
     const y = random(0, innerHeight - 0.5 * side);
     
+    fill('#ffcc33');
     noStroke();
     polygon(x, y, side, 3);
 }
@@ -170,6 +179,7 @@ function drawSnare(intensity) {
     const x = random(0, innerWidth);
     const y = random(0, innerHeight);
     
+    fill('#002FA7');
     noStroke();
     rect(x, y, side, side);
 }
@@ -179,6 +189,7 @@ function drawHighTom(intensity) {
     const x = random(0, innerWidth);
     const y = random(0, innerHeight);
     
+    fill('#00EAE6');
     noStroke();
     polygon(x, y, side, 5);
 }
@@ -188,6 +199,7 @@ function drawMidTom(intensity) {
     const x = random(0, innerWidth);
     const y = random(0, innerHeight);
     
+    fill('#B15CFF');
     noStroke();
     polygon(x, y, side, 6);
 }
@@ -197,6 +209,7 @@ function drawLowTom(intensity) {
     const x = random(0, innerWidth);
     const y = random(0, innerHeight);
     
+    fill('#5900A6');
     noStroke();
     polygon(x, y, side, 7);
 }
@@ -214,50 +227,146 @@ function invertHex(hex) {
     return '#' + (Number(`0x1${number}`) ^ 0xFFFFFF).toString(16).substr(1).toUpperCase();
 }
 
+
+function drawGradient(x, y, w, h, c1, c2, axis) {
+    noFill();
+
+    if (axis === Y_AXIS) {
+        for (let i = y; i <= y + h; i++) {
+            let inter = map(i, y, y + h, 0, 1);
+            let c = lerpColor(c1, c2, inter);
+            stroke(c);
+            line(x, i, x + w, i);
+        }
+    } else if (axis === X_AXIS) {
+        for (let i = x; i <= x + w; i++) {
+            let inter = map(i, x, x + w, 0, 1);
+            let c = lerpColor(c1, c2, inter);
+            stroke(c);
+            line(i, y, i, y + h);
+        }
+    }
+}
+
+function drawHihatOpening(intensity) {
+    const side = map(intensity, 0, 160, 0, max(innerWidth, innerHeight) * 0.5);
+    const x = random(0, innerWidth - side);
+    const y = random(0, innerHeight - side*1.6);
+    const randomColor = color(random(0, 255), random(0, 255), random(0, 255));
+    const randomOpposite = color(255 - red(randomColor), 255 - blue(randomColor), 255 - green(randomColor));
+
+    drawGradient(x, y, side, side * 1.61, randomColor, randomOpposite, Y_AXIS);
+    return;
+}
+
+function drawRim(intensity) {
+    const side = map(intensity, 0, 160, 0, max(innerWidth, innerHeight) * 0.5);
+    const x = random(0, innerWidth);
+    const y = random(0, innerHeight);
+
+    noStroke();
+    rect(x, y, side*0.3, side);
+}
+
+function drawSnareRim(intensity) {
+    return;
+}
+
+function drawHihatPedal(intensity) {
+
+}
+
+function drawHihatOpen(intensity) {
+    let lineNumber = map(intensity, 0, 160, 1, 10);
+    const initialX = random(0, width);
+    const finalX = random(0, width);
+    const weight = map(intensity, 0, 160, 1, 30);
+    const lineColor = color(map(intensity, 0, 160, 150, 255), 255, 0);
+    
+    stroke(lineColor);
+    strokeWeight(weight);
+    for (let i = 0; i < lineNumber; i++) {
+        line(initialX + i * weight * 2.5, 0, finalX +  i * weight * 2.5, height);
+    }
+}
+
+function drawHighTomRim(intensity) {
+
+}
+
+function drawMidTomRim(intensity) {
+
+}
+
+function drawLowTomRim(intensity) {
+
+}
+
 function draw() {
     let hit;
     while (hit = hits.shift()) {
         push();
+        console.log(hit.pad);
         switch (hit.pad) {
+
             case BASSDRUM:
-            blendMode(DIFFERENCE);
-            fill(invertHex('#ae2633'));
             drawBassdrum(hit.intensity);
             break;
 
+            case HIHAT_PEDAL: // Almost same sound    
             case HIHAT_CLOSED:
-            fill('#ffcc33');
             drawClosedHihat(hit.intensity);
             break;
 
             case SNARE:
-            fill('#002FA7');
             drawSnare(hit.intensity);
             break;
 
             case HIGH_TOM:
-            fill('#00EAE6');
             drawHighTom(hit.intensity);
             break;
 
             case MID_TOM:
-            fill('#B15CFF');
             drawMidTom(hit.intensity);
             break;
 
             case LOW_TOM:
-            fill('#5900A6');
             drawLowTom(hit.intensity);
             break;
 
             case CRASH:
-            blendMode(DIFFERENCE);
-            fill(invertHex('#CAFF12'));
             drawCrash(hit.intensity);
             break;
 
             case RIDE:
             drawRide(hit.intensity);
+            break;
+
+            case HIHAT_OPEN:
+            drawHihatOpen(hit.intensity);
+            break;
+
+            case HIHAT_OPENING:
+            drawHihatOpening(hit.intensity);
+            break;
+
+            case SNARE_RIM:
+            drawSnareRim(hit.intensity);
+            break;
+            
+            case HIGH_TOM_RIM:
+            drawHighTomRim(hit.intensity);
+            break;
+
+            case MID_TOM_RIM:
+            drawMidTomRim(hit.intensity);
+            break;
+            
+            case LOW_TOM_RIM:
+            drawLowTomRim(hit.intensity);
+            break
+            
+            default:
             break;
         }
         pop();
@@ -270,9 +379,24 @@ function draw() {
 }
 
 window.addEventListener('keydown', () => {
-    console.log('keydown');
-    hits.push({ pad: RIDE, intensity: 50 });
-    hits.push({ pad: HIHAT_CLOSED, intensity: 50 });
-
+    /*console.log('keydown');
+    hits.push({ pad: BASSDRUM, intensity: 50 });
    
+*/
+    hits.push({ pad: HIHAT_CLOSED, intensity: 50 });
+    hits.push({ pad: HIHAT_OPENING,intensity: 50 });
+    hits.push({ pad: HIHAT_PEDAL,intensity: 50 });
+    hits.push({ pad: HIHAT_OPEN, intensity: 50 });
+    /*
+    hits.push({ pad: SNARE,intensity: 50 });
+    hits.push({ pad: HIGH_TOM, intensity: 50 });
+    hits.push({ pad: MID_TOM, intensity: 50 });
+    hits.push({ pad: LOW_TOM, intensity: 50 });
+
+    hits.push({ pad: SNARE_RIM,intensity: 50 });
+    hits.push({ pad: HIGH_TOM_RIM, intensity: 50 });
+    hits.push({ pad: MID_TOM_RIM, intensity: 50 });
+    hits.push({ pad: LOW_TOM_RIM, intensity: 50 });
+    hits.push({ pad: RIDE, intensity: 50 });
+    hits.push({ pad: CRASH, intensity: 50 });*/
 });
