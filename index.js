@@ -13,7 +13,7 @@ const LOW_TOM_RIM = 'LOW_TOM_RIM';
 const HIHAT_PEDAL = 'HIHAT_PEDAL';
 const HIHAT_CLOSED = 'HIHAT_CLOSED';
 const HIHAT_OPEN = 'HIHAT_OPEN';
-const HIHAT_OPENING = 'HIHAT_OPENING';
+const HIHAT_SEMI_OPEN = 'HIHAT_SEMI_OPEN';
 const CRASH = 'CRASH';
 const RIDE = 'RIDE';
 
@@ -25,7 +25,7 @@ const BACKGROUND_INCREMENT = 0.01; // Must be 0.002 or greater
 const DEBUG = location.href.includes('localhost');
 
 const notePadMap = {
-    '23': HIHAT_OPENING,
+    '23': HIHAT_SEMI_OPEN,
     '36': BASSDRUM,
     '38': SNARE,
     '40': SNARE_RIM,
@@ -248,7 +248,7 @@ function drawGradient(x, y, w, h, c1, c2, axis) {
     }
 }
 
-function drawHihatOpening(intensity) {
+function drawHihatOpen(intensity) {
     const side = map(intensity, 0, 160, 0, max(innerWidth, innerHeight) * 0.5);
     const x = random(0, innerWidth - side);
     const y = random(0, innerHeight - side*1.6);
@@ -276,7 +276,7 @@ function drawHihatPedal(intensity) {
 
 }
 
-function drawHihatOpen(intensity) {
+function drawHihatSemiOpen(intensity) {
     let lineNumber = map(intensity, 0, 160, 1, 10);
     const initialX = random(0, width);
     const finalX = random(0, width);
@@ -346,8 +346,8 @@ function draw() {
             drawHihatOpen(hit.intensity);
             break;
 
-            case HIHAT_OPENING:
-            drawHihatOpening(hit.intensity);
+            case HIHAT_SEMI_OPEN:
+            drawHihatSemiOpen(hit.intensity);
             break;
 
             case SNARE_RIM:
@@ -384,7 +384,7 @@ window.addEventListener('keydown', () => {
    
 */
     hits.push({ pad: HIHAT_CLOSED, intensity: 50 });
-    hits.push({ pad: HIHAT_OPENING,intensity: 50 });
+    hits.push({ pad: HIHAT_SEMI_OPEN,intensity: 50 });
     hits.push({ pad: HIHAT_PEDAL,intensity: 50 });
     hits.push({ pad: HIHAT_OPEN, intensity: 50 });
     /*
