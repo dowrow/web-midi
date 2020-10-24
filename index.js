@@ -25,7 +25,7 @@ const BACKGROUND_INCREMENT = 0.01; // Must be 0.002 or greater
 const DEBUG = location.href.includes('localhost');
 
 const notePadMap = {
-    '29': HIHAT_OPENING,
+    '23': HIHAT_OPENING,
     '36': BASSDRUM,
     '38': SNARE,
     '40': SNARE_RIM,
