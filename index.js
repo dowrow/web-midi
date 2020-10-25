@@ -119,8 +119,9 @@ function drawBassdrum(intensity) {
     const x = random(0, innerWidth);
     const y = random(0, innerHeight);
     
-    blendMode(DIFFERENCE);
-    fill(invertHex('#ae2633'));
+    //blendMode(DIFFERENCE);
+    //fill(invertHex('#ae2633'));
+    fill('#ae2633');
     noStroke();
     ellipse(x, y, radius, radius);
 }
@@ -265,11 +266,12 @@ function drawRim(intensity) {
     const y = random(0, innerHeight);
 
     noStroke();
+    fill('orange');
     rect(x, y, side*0.3, side);
 }
 
 function drawSnareRim(intensity) {
-    return;
+    drawRim(intensity);
 }
 
 function drawHihatPedal(intensity) {
@@ -291,15 +293,15 @@ function drawHihatSemiOpen(intensity) {
 }
 
 function drawHighTomRim(intensity) {
-
+    drawRim(intensity);
 }
 
 function drawMidTomRim(intensity) {
-
+    drawRim(intensity);
 }
 
 function drawLowTomRim(intensity) {
-
+    drawRim(intensity);
 }
 
 function draw() {
@@ -378,25 +380,24 @@ function draw() {
     pop();
 }
 
-window.addEventListener('keydown', () => {
-    /*console.log('keydown');
-    hits.push({ pad: BASSDRUM, intensity: 50 });
-   
-*/
-    hits.push({ pad: HIHAT_CLOSED, intensity: 50 });
-    hits.push({ pad: HIHAT_SEMI_OPEN,intensity: 50 });
-    hits.push({ pad: HIHAT_PEDAL,intensity: 50 });
-    hits.push({ pad: HIHAT_OPEN, intensity: 50 });
-    /*
-    hits.push({ pad: SNARE,intensity: 50 });
-    hits.push({ pad: HIGH_TOM, intensity: 50 });
-    hits.push({ pad: MID_TOM, intensity: 50 });
-    hits.push({ pad: LOW_TOM, intensity: 50 });
-
-    hits.push({ pad: SNARE_RIM,intensity: 50 });
-    hits.push({ pad: HIGH_TOM_RIM, intensity: 50 });
-    hits.push({ pad: MID_TOM_RIM, intensity: 50 });
-    hits.push({ pad: LOW_TOM_RIM, intensity: 50 });
-    hits.push({ pad: RIDE, intensity: 50 });
-    hits.push({ pad: CRASH, intensity: 50 });*/
+window.addEventListener('keydown', (event) => {
+    const keyPads = {
+        '1': HIHAT_CLOSED,
+        '2': HIHAT_SEMI_OPEN,
+        '3': HIHAT_OPEN,
+        '4': SNARE,
+        '5': BASSDRUM,
+        '6': HIGH_TOM,   
+        '7': MID_TOM,
+        '8': LOW_TOM,
+        '9': CRASH,
+        '0': RIDE,
+    };
+    if (keyPads.hasOwnProperty(event.key)) {
+        hits.push({ 
+            pad: keyPads[event.key],
+            intensity: random(0, 160)
+        });
+    }
+    
 });
