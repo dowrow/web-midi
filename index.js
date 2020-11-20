@@ -119,9 +119,9 @@ function drawBassdrum(intensity) {
     const x = random(0, innerWidth);
     const y = random(0, innerHeight);
     
-    //blendMode(DIFFERENCE);
-    //fill(invertHex('#ae2633'));
-    fill('#ae2633');
+    blendMode(DIFFERENCE);
+    fill(invertHex('#ae2633'));
+    //fill('#ae2633');
     noStroke();
     ellipse(x, y, radius, radius);
 }
